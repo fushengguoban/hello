@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
     }.startCoroutine(object : Continuation<Int> {
         override val context = EmptyCoroutineContext
         override fun resumeWith(result: Result<Int>) {
-            TODO("Not yet implemented")
         }
 
     })
@@ -60,12 +59,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         suspendCoroutine<Unit> { continuation ->
-            executor.schedule({continuation.resume(Unit)},time,unit)
+            executor.schedule({ continuation.resume(Unit) }, time, unit)
         }
     }
 
     private val executor = Executors.newScheduledThreadPool(1) { runnable ->
         Thread(runnable, "Scheduler").apply { isDaemon = true }
     }
+
+    val ints = sequence {
+        (1..3).forEach {
+            yield(it)
+        }
+    }
+
 
 }
